@@ -121,6 +121,11 @@
   }
   .card:hover { transform: translateY(-6px); border-color: rgba(255,138,91,.5); }
   .card.hide { display: none; }
+  /* 最後一排只剩一張時，改成橫跨整排的寬版卡片 */
+  .card.wide { grid-column: 1 / -1; flex-direction: row; }
+  .card.wide .thumb { flex: 0 0 58%; aspect-ratio: auto; min-height: 340px; }
+  .card.wide .body { justify-content: center; padding: 32px 36px; }
+  .card.wide .chips { margin-top: 0; }
   .thumb { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #0a0b1a; }
   .thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2,.8,.2,1); }
   .card:hover .thumb img { transform: scale(1.05); }
@@ -168,6 +173,9 @@
   /* ---------- 手機版 ---------- */
   @media (max-width: 820px) {
     .grid { grid-template-columns: 1fr; gap: 22px; }
+    .card.wide { flex-direction: column; }
+    .card.wide .thumb { flex: none; aspect-ratio: 16 / 10; min-height: 0; }
+    .card.wide .body { padding: 22px 24px 24px; }
     .about { grid-template-columns: 1fr; }
     .nav nav { gap: 16px; }
     .hero { display: block; min-height: 0; background: var(--bg); }
@@ -209,7 +217,7 @@
           <a class="btn" href="#works">看看作品 ↓</a>        </div>
         <div class="stats">
           <div><b id="count">4</b><span>線上作品</span></div>
-          <div><b>3</b><span>款遊戲</span></div>
+          <div><b id="games">4</b><span>款遊戲</span></div>
           <div><b>0</b><span>需要安裝</span></div>
         </div>
       </div>
@@ -295,6 +303,15 @@
       url: "https://hankhsu1969.github.io/git-practice/",
       desc: "給初學者的互動式 Git 教學。在網頁終端機輸入指令，就能即時看到「工作目錄 → 暫存區 → 儲存庫」的變化，10 堂關卡從 init、commit 一路練到 branch 與 merge。",
       tech: ["JavaScript", "指令模擬引擎", "Commit 圖視覺化"]
+    },
+    {
+      title: "皮可 3D 大冒險",
+      en: "Pico's 3D Adventure",
+      cat: "game", tag: "遊戲", color: "#ff9d4d",
+      img: "images/pico-3d-adventure.webp",
+      url: "https://hankhsu1969.github.io/pico-3d-adventure/",
+      desc: "3D 平台跳躍冒險遊戲。操控皮可穿越晴空草原、夕陽沙漠、冰雪山峰、雲端王國與熔岩城堡 5 大關卡，踩扁敵人、頂方塊拿道具、收集星星寶石，最後打敗咕嚕大王！支援鍵盤、手把與手機虛擬搖桿。",
+      tech: ["Three.js", "3D 平台跳躍", "手機虛擬搖桿"]
     }
   ];
 
@@ -314,16 +331,24 @@
       </div>
     </a>`).join("");
   document.getElementById("count").textContent = works.length;
+  document.getElementById("games").textContent = works.filter(w => w.cat === "game").length;
   document.getElementById("yr").textContent = new Date().getFullYear();
 
-  // 分類篩選
+  // 分類篩選；顯示數量為奇數時，最後一張改成寬版
+  const applyFilter = f => {
+    const cards = [...grid.querySelectorAll(".card")];
+    cards.forEach(c => c.classList.toggle("hide", f !== "all" && c.dataset.cat !== f));
+    const shown = cards.filter(c => !c.classList.contains("hide"));
+    cards.forEach(c => c.classList.remove("wide"));
+    if (shown.length > 1 && shown.length % 2) shown.at(-1).classList.add("wide");
+  };
   document.querySelectorAll(".filters button").forEach(btn => {
     btn.addEventListener("click", () => {
       document.querySelectorAll(".filters button").forEach(b => b.classList.toggle("on", b === btn));
-      const f = btn.dataset.f;
-      grid.querySelectorAll(".card").forEach(c => c.classList.toggle("hide", f !== "all" && c.dataset.cat !== f));
+      applyFilter(btn.dataset.f);
     });
   });
+  applyFilter("all");
 
   // 捲動時導覽列加底色
   const nav = document.getElementById("nav");
