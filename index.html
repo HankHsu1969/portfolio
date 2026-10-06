@@ -142,6 +142,7 @@
     opacity: 0; transform: translateY(8px); transition: all .3s;
   }
   .card:hover .thumb::after { opacity: 1; transform: none; }
+  .card[data-cat="learn"] .thumb::after { content: "開始學習 →"; }  /* 學習頁在目前分頁打開 */
   .tag {
     position: absolute; left: 14px; top: 14px; z-index: 1;
     padding: 4px 12px; border-radius: 99px; font-size: .8rem; font-weight: 700;
@@ -378,7 +379,7 @@
 
   const grid = document.getElementById("grid");
   grid.innerHTML = works.map(w => `
-    <a class="card reveal" data-cat="${w.cat}" href="${w.url}" target="_blank" rel="noopener" style="--tag:${w.color}">
+    <a class="card reveal" data-cat="${w.cat}" href="${w.url}"${w.cat === "learn" ? "" : ' target="_blank" rel="noopener"'} style="--tag:${w.color}">
       <div class="thumb">
         <span class="tag">${w.tag}</span>
         <img src="${w.img}" alt="${w.title} 畫面截圖" loading="lazy" width="960" height="600">
