@@ -54,9 +54,10 @@
 
   /* ---------- 主視覺 ---------- */
   .hero {
-    position: relative; min-height: min(92vh, 820px);
-    display: flex; align-items: center;
-    background: url(images/hero.webp) center right / cover no-repeat, var(--bg-2);
+    /* 高度跟著主視覺圖比例（1997×1036）走，整張圖都看得到；內容較高時會自動撐高 */
+    position: relative; min-height: calc(100vw * 1036 / 1997); padding-block: 0;
+    display: flex; align-items: flex-start;
+    background: url(images/hero.webp?v=2) right top / cover no-repeat, var(--bg-2);
     overflow: hidden;
   }
   .hero::before {
@@ -65,7 +66,7 @@
       linear-gradient(90deg, rgba(15,16,36,.92) 0%, rgba(15,16,36,.65) 38%, rgba(15,16,36,0) 70%),
       linear-gradient(0deg, var(--bg) 0%, rgba(15,16,36,0) 28%);
   }
-  .hero .wrap { position: relative; padding-block: 120px 80px; }
+  .hero .wrap { position: relative; padding-block: 96px 80px; }
   .hero-img { display: none; }
   .hero-text { max-width: 540px; }
   .eyebrow {
@@ -98,18 +99,23 @@
 
   /* ---------- 作品區 ---------- */
   section { padding-block: 80px; scroll-margin-top: 40px; }
-  .sec-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 36px; }
-  .sec-head h2 { font-family: "Huninn", sans-serif; font-weight: 400; font-size: clamp(1.8rem, 4vw, 2.4rem); margin: 0; line-height: 1.3; }
-  .sec-head p { margin: 4px 0 0; color: var(--muted); }
-  .filters { display: flex; flex-wrap: wrap; gap: 8px; }
-  .filters button {
-    font: inherit; font-size: .92rem; cursor: pointer;
-    padding: 8px 18px; border-radius: 99px;
-    border: 1px solid var(--line); background: var(--bg-2); color: var(--muted);
-    transition: all .2s;
+  /* 分頁切換 */
+  .tabs {
+    display: inline-flex; gap: 6px; padding: 6px; margin-bottom: 24px;
+    background: var(--bg-2); border: 1px solid var(--line); border-radius: 99px;
   }
-  .filters button:hover { color: var(--text); }
-  .filters button.on { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .tabs button {
+    font: inherit; font-size: 1rem; font-weight: 700; cursor: pointer;
+    padding: 11px 24px; border-radius: 99px; border: 0;
+    background: transparent; color: var(--muted);
+    transition: background .25s, color .25s, box-shadow .25s;
+  }
+  .tabs button:hover { color: var(--text); }
+  .tabs button[aria-selected="true"] {
+    background: linear-gradient(135deg, var(--accent), #ff6f7d); color: #fff;
+    box-shadow: 0 8px 22px -10px rgba(255,111,125,.9);
+  }
+  .nav nav a.on { color: var(--text); }
 
   .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
   .card {
@@ -181,12 +187,19 @@
     .hero { display: block; min-height: 0; background: var(--bg); }
     .hero::before { display: none; }
     .hero-img { display: block; position: relative; }
-    .hero-img img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: 62% center; }
+    .hero-img img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: 95% center; }
     .hero-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, var(--bg) 0%, rgba(15,16,36,0) 45%); }
     .hero .wrap { padding-block: 0 24px; margin-top: -48px; }
     .stats { gap: 22px; }
     section { padding-block: 56px; }
     .thumb::after { opacity: 1; transform: none; }
+  }
+  @media (max-width: 520px) {
+    .brand span { display: none; }
+    .nav nav { gap: 14px; }
+    .nav nav a { font-size: .9rem; }
+    .tabs { display: flex; }
+    .tabs button { flex: 1; padding: 10px 8px; font-size: .95rem; }
   }
   @media (max-width: 420px) {
     .skills { grid-template-columns: 1fr; }
@@ -197,9 +210,10 @@
 
 <header class="nav" id="nav">
   <div class="wrap">
-    <a class="brand" href="#top"><i>H</i>Hank 的作品集</a>
+    <a class="brand" href="#top"><i>H</i><span>Hank 的作品集</span></a>
     <nav>
-      <a href="#works">作品</a>
+      <a href="#games" data-tab="game">遊戲與作品</a>
+      <a href="#learn" data-tab="learn">線上免費學習</a>
       <a href="#about">關於</a>
     </nav>
   </div>
@@ -207,14 +221,19 @@
 
 <main id="top">
   <section class="hero">
-    <div class="hero-img"><img src="images/hero.webp" alt="深夜的遊戲開發工作桌，一隻三花貓睡在筆電旁"></div>
+    <div class="hero-img"><img src="images/hero.webp?v=2" alt="深夜的遊戲開發工作桌，一隻三花貓睡在筆電旁"></div>
     <div class="wrap">
       <div class="hero-text reveal">
+        <div class="tabs" role="tablist" aria-label="作品分頁">
+          <button role="tab" data-tab="game" aria-selected="true">🎮 遊戲與作品</button>
+          <button role="tab" data-tab="learn" aria-selected="false">📚 線上免費學習</button>
+        </div>
         <span class="eyebrow">✦ 網頁遊戲 · 互動學習工具</span>
         <h1>打開瀏覽器<br>就能<em>玩</em>的作品</h1>
         <p>我喜歡把點子做成可以直接上手的網頁：從教你學 Git 的互動練功房，到一整群可愛貓咪登場的休閒遊戲，還有能旋轉視角的 3D 麻將塔。</p>
         <div class="actions">
-          <a class="btn" href="#works">看看作品 ↓</a>        </div>
+          <a class="btn" href="#games" data-tab="game">看看作品 ↓</a>
+        </div>
         <div class="stats">
           <div><b id="count">4</b><span>線上作品</span></div>
           <div><b id="games">4</b><span>款遊戲</span></div>
@@ -226,18 +245,6 @@
 
   <section id="works">
     <div class="wrap">
-      <div class="sec-head reveal">
-        <div>
-          <h2>精選作品</h2>
-          <p>點任一張卡片，會在新分頁開啟線上版本</p>
-        </div>
-        <div class="filters" role="group" aria-label="分類篩選">
-          <button class="on" data-f="all">全部</button>
-          <button data-f="game">遊戲</button>
-          <button data-f="learn">教學工具</button>
-        </div>
-      </div>
-
       <div class="grid" id="grid"></div>
     </div>
   </section>
@@ -248,7 +255,7 @@
         <div>
           <h2>關於我</h2>
           <p>我是 Hank，喜歡用網頁技術把想法變成看得到、玩得到的東西。每個作品都是純前端、部署在 GitHub Pages 與 Netlify，手機和電腦都能直接開來玩。</p>
-          <a class="btn" href="https://github.com/HankHsu1969" target="_blank" rel="noopener">到 GitHub 看原始碼 ↗</a>
+          <a class="btn" href="https://www.guidestar.com.tw/" target="_blank" rel="noopener">星方向 AI 學院 ↗</a>
         </div>
         <div class="skills">
           <div class="skill"><b>🎮</b><span>Canvas 2D 遊戲開發</span></div>
@@ -323,10 +330,19 @@
       tech: ["JavaScript", "跑燈動畫", "街機音效"]
     },
     {
+      title: "水果盤",
+      en: "Fruit Machine",
+      cat: "game", tag: "遊戲", color: "#ffb347",
+      img: "images/fruit.webp",
+      url: "https://hankhsu1969.github.io/fruit/",
+      desc: "懷舊三輪水果拉霸機。押注、選擇 1 到 8 條押線後轉動，可以一次全停或用停 1、停 2、停 3 逐輪停下，連成線就依賠率表派彩，還能比大小加倍。附本機紀錄與中獎紀錄，點數僅供娛樂、不具任何價值。",
+      tech: ["JavaScript", "8 條押線", "逐輪停止"]
+    },
+    {
       title: "3D 麻將塔",
       en: "3D Mahjong Tower",
       cat: "game", tag: "遊戲", color: "#8fd3ff",
-      img: "images/3d-game.webp",
+      img: "images/3d-game.webp?v=2",
       url: "https://hankhsu1969.github.io/3D-Game/",
       desc: "立體版麻將接龍。找出兩張相同且可移動的牌消除，可自由旋轉、縮放視角。內建經典烏龜、金字塔、城堡等 4 種牌陣，還有提示、悔棋與洗牌功能。",
       tech: ["Three.js", "3D 視角操作", "4 種牌陣"]
@@ -339,6 +355,24 @@
       url: "https://hankhsu1969.github.io/git-practice/",
       desc: "給初學者的互動式 Git 教學。在網頁終端機輸入指令，就能即時看到「工作目錄 → 暫存區 → 儲存庫」的變化，10 堂關卡從 init、commit 一路練到 branch 與 merge。",
       tech: ["JavaScript", "指令模擬引擎", "Commit 圖視覺化"]
+    },
+    {
+      title: "SQLite 互動學習工具",
+      en: "SQL Playground",
+      cat: "learn", tag: "教學工具", color: "#79b8ff",
+      img: "images/sql-script.webp",
+      url: "https://hankhsu1969.github.io/Sql-Script/",
+      desc: "直接在瀏覽器裡跑真正的 SQLite 資料庫。左側 10 個範例從建表、SELECT、WHERE、ORDER BY、GROUP BY、JOIN，一路到 INSERT、UPDATE、DELETE 與子查詢，點一下就能執行、看結果，也能自己改 SQL 練習。",
+      tech: ["sql.js (WebAssembly)", "SQL 編輯器", "10 個範例查詢"]
+    },
+    {
+      title: "HTML 網頁發展史",
+      en: "History of Web Development",
+      cat: "learn", tag: "圖文教材", color: "#e89a7a",
+      img: "images/html-history.webp",
+      url: "https://hankhsu1969.github.io/html-web-development-history/",
+      desc: "用時間軸看懂網頁三十多年的演進：從 1991 年的純 HTML、CSS、JavaScript、AJAX、jQuery，到 React、Vue、Next.js 與 AI 輔助開發。每個階段都說明解決了什麼問題，並附上可以互動的實際效果與對應程式碼。",
+      tech: ["時間軸圖文", "互動範例", "程式碼對照"]
     }
   ];
 
@@ -361,21 +395,33 @@
   document.getElementById("games").textContent = works.filter(w => w.cat === "game").length;
   document.getElementById("yr").textContent = new Date().getFullYear();
 
-  // 分類篩選；顯示數量為奇數時，最後一張改成寬版
-  const applyFilter = f => {
+  // 分頁：遊戲與作品(game) / 線上免費學習(learn)；顯示數量為奇數時，最後一張改成寬版
+  const tabHash = { game: "#games", learn: "#learn" };
+  const showTab = (tab, scroll, updateHash = true) => {
     const cards = [...grid.querySelectorAll(".card")];
-    cards.forEach(c => c.classList.toggle("hide", f !== "all" && c.dataset.cat !== f));
+    cards.forEach(c => c.classList.toggle("hide", c.dataset.cat !== tab));
     const shown = cards.filter(c => !c.classList.contains("hide"));
     cards.forEach(c => c.classList.remove("wide"));
-    if (shown.length > 1 && shown.length % 2) shown.at(-1).classList.add("wide");
+    if (shown.length % 2) shown.at(-1).classList.add("wide");
+    document.querySelectorAll(".tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === tab));
+    document.querySelectorAll(".nav nav a[data-tab]").forEach(a => a.classList.toggle("on", a.dataset.tab === tab));
+    if (updateHash) history.replaceState(null, "", tabHash[tab]);
+    if (scroll) document.getElementById("works").scrollIntoView({ behavior: "smooth" });
   };
-  document.querySelectorAll(".filters button").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".filters button").forEach(b => b.classList.toggle("on", b === btn));
-      applyFilter(btn.dataset.f);
-    });
+  document.querySelectorAll("[data-tab]").forEach(el => el.addEventListener("click", e => {
+    e.preventDefault();
+    showTab(el.dataset.tab, true);
+  }));
+  const startTab = location.hash === "#learn" ? "learn" : "game";
+  showTab(startTab, false, false);
+  // 用 #learn / #games 網址打開時，等網頁載入完（避免瀏覽器又捲回頂端）再捲到作品區
+  if (location.hash === "#learn" || location.hash === "#games") {
+    const toWorks = () => requestAnimationFrame(() => document.getElementById("works").scrollIntoView());
+    document.readyState === "complete" ? toWorks() : addEventListener("load", toWorks, { once: true });
+  }
+  addEventListener("hashchange", () => {
+    if (location.hash === "#learn" || location.hash === "#games") showTab(location.hash === "#learn" ? "learn" : "game", true, false);
   });
-  applyFilter("all");
 
   // 捲動時導覽列加底色
   const nav = document.getElementById("nav");
