@@ -132,6 +132,28 @@
   .card.wide .thumb { flex: 0 0 58%; aspect-ratio: auto; min-height: 340px; }
   .card.wide .body { justify-content: center; padding: 32px 36px; }
   .card.wide .chips { margin-top: 0; }
+  .grid[hidden], .videos[hidden] { display: none; }
+
+  /* ---------- 影音作品：嵌入 YouTube 播放清單，內容跟著 YouTube 自動更新 ---------- */
+  .v-intro { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 36px; }
+  .v-intro p { margin: 0; color: var(--muted); font-size: .95rem; }
+  .v-channel { font-size: .92rem; padding: 10px 20px; }
+  .v-lists { display: grid; grid-template-columns: repeat(2, 1fr); gap: 44px 28px; align-items: start; }
+  .v-group.shorts { grid-column: 1 / -1; }
+  .v-head {
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px;
+    margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--line);
+  }
+  .v-head h3 { margin: 0; font-size: 1.35rem; }
+  .v-head a { font-size: .88rem; color: var(--accent-2); text-decoration: none; white-space: nowrap; }
+  .v-head a:hover { text-decoration: underline; }
+  .vplayer {
+    position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #000;
+    border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow);
+  }
+  .shorts .vplayer { aspect-ratio: 9 / 16; width: min(100%, 320px); }
+  .vplayer iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  @media (max-width: 820px) { .v-lists { grid-template-columns: 1fr; } }
   .thumb { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #0a0b1a; }
   .thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2,.8,.2,1); }
   .card:hover .thumb img { transform: scale(1.05); }
@@ -208,6 +230,7 @@
   @media (max-width: 360px) {
     .nav nav { gap: 10px; }
     .nav nav a { font-size: .84rem; }
+    .tabs button { font-size: .85rem; padding: 10px 4px; white-space: nowrap; }
   }
 </style>
 </head>
@@ -217,8 +240,9 @@
   <div class="wrap">
     <a class="brand" href="#top"><i>H</i><span>Hank 的作品集</span></a>
     <nav>
-      <a href="#games" data-tab="game">遊戲與作品</a>
-      <a href="#learn" data-tab="learn">線上免費學習</a>
+      <a href="#games" data-tab="game">遊戲</a>
+      <a href="#videos" data-tab="video">影音</a>
+      <a href="#learn" data-tab="learn">線上學習</a>
       <a href="https://www.guidestar.com.tw/">返回星方向</a>
     </nav>
   </div>
@@ -230,8 +254,9 @@
     <div class="wrap">
       <div class="hero-text reveal">
         <div class="tabs" role="tablist" aria-label="作品分頁">
-          <button role="tab" data-tab="game" aria-selected="true">🎮 遊戲與作品</button>
-          <button role="tab" data-tab="learn" aria-selected="false">📚 線上免費學習</button>
+          <button role="tab" data-tab="game" aria-selected="true">🎮 遊戲</button>
+          <button role="tab" data-tab="video" aria-selected="false">🎬 影音</button>
+          <button role="tab" data-tab="learn" aria-selected="false">📚 線上學習</button>
         </div>
         <span class="eyebrow">✦ 網頁遊戲 · 互動學習工具</span>
         <h1>打開瀏覽器<br>就能<em>玩</em>的作品</h1>
@@ -241,7 +266,7 @@
         </div>
         <div class="stats">
           <div><b id="count">4</b><span>線上作品</span></div>
-          <div><b id="games">4</b><span>款遊戲</span></div>
+          <div><b id="game-count">4</b><span>款遊戲</span></div>
           <div><b>0</b><span>需要安裝</span></div>
         </div>
       </div>
@@ -251,6 +276,7 @@
   <section id="works">
     <div class="wrap">
       <div class="grid" id="grid"></div>
+      <div class="videos" id="video-list" hidden></div>
     </div>
   </section>
 
@@ -406,12 +432,49 @@
       </div>
     </a>`).join("");
   document.getElementById("count").textContent = works.length;
-  document.getElementById("games").textContent = works.filter(w => w.cat === "game").length;
+  document.getElementById("game-count").textContent = works.filter(w => w.cat === "game").length;
   document.getElementById("yr").textContent = new Date().getFullYear();
 
-  // 分頁：遊戲與作品(game) / 線上免費學習(learn)；顯示數量為奇數時，最後一張改成寬版
-  const tabHash = { game: "#games", learn: "#learn" };
+  // 影音作品：直接嵌入 YouTube 播放清單。到 YouTube 調整播放清單裡的影片，這裡會自動跟著更新
+  const CHANNEL = "https://www.youtube.com/@guidestar-ai";
+  const videoGroups = [
+    { name: "AI 教學影片", list: "PLXl-VahdGi5w" },
+    { name: "AI 影片製作", list: "PLU6pDt8zIpJQ" },
+    // YouTube 自動產生的「頻道 Shorts」清單，上傳新的 Shorts 會自動加入
+    { name: "Shorts", list: "UUSHuYUececrHa5TG2Tuo9N75g", link: CHANNEL + "/shorts", shorts: true }
+  ];
+  const videosBox = document.getElementById("video-list");
+  videosBox.innerHTML = `
+    <div class="v-intro">
+      <p>影片直接嵌入自 YouTube 播放清單，可以在播放器裡切換清單中的其他影片。</p>
+      <a class="btn v-channel" href="${CHANNEL}">▶ 星方向 AI 教育學院 YouTube 頻道</a>
+    </div>
+    <div class="v-lists">
+      ${videoGroups.map(g => `
+        <div class="v-group${g.shorts ? " shorts" : ""}">
+          <div class="v-head">
+            <h3>${g.name}</h3>
+            <a href="${g.link || "https://www.youtube.com/playlist?list=" + g.list}">在 YouTube 看全部 →</a>
+          </div>
+          <div class="vplayer">
+            <iframe title="${g.name}（YouTube 播放清單）" loading="lazy"
+              src="https://www.youtube-nocookie.com/embed/videoseries?list=${g.list}&rel=0&enablejsapi=1"
+              allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+          </div>
+        </div>`).join("")}
+    </div>`;
+  // 離開影音分頁時，暫停正在播放的影片
+  const stopVideos = () => videosBox.querySelectorAll("iframe").forEach(f =>
+    f.contentWindow?.postMessage(JSON.stringify({ event: "command", func: "pauseVideo", args: [] }), "https://www.youtube-nocookie.com"));
+
+  // 分頁：遊戲(game) / 影音(video) / 線上學習(learn)；作品顯示數量為奇數時，最後一張改成寬版
+  const tabHash = { game: "#games", learn: "#learn", video: "#videos" };
+  const hashTab = { "#games": "game", "#learn": "learn", "#videos": "video" };
   const showTab = (tab, scroll, updateHash = true) => {
+    const isVideo = tab === "video";
+    grid.hidden = isVideo;
+    videosBox.hidden = !isVideo;
+    if (!isVideo) stopVideos();  // 離開影音分頁時停止播放
     const cards = [...grid.querySelectorAll(".card")];
     cards.forEach(c => c.classList.toggle("hide", c.dataset.cat !== tab));
     const shown = cards.filter(c => !c.classList.contains("hide"));
@@ -426,15 +489,14 @@
     e.preventDefault();
     showTab(el.dataset.tab, true);
   }));
-  const startTab = location.hash === "#learn" ? "learn" : "game";
-  showTab(startTab, false, false);
-  // 用 #learn / #games 網址打開時，等網頁載入完（避免瀏覽器又捲回頂端）再捲到作品區
-  if (location.hash === "#learn" || location.hash === "#games") {
+  showTab(hashTab[location.hash] || "game", false, false);
+  // 用 #games / #learn / #videos 網址打開時，等網頁載入完（避免瀏覽器又捲回頂端）再捲到作品區
+  if (hashTab[location.hash]) {
     const toWorks = () => requestAnimationFrame(() => document.getElementById("works").scrollIntoView());
     document.readyState === "complete" ? toWorks() : addEventListener("load", toWorks, { once: true });
   }
   addEventListener("hashchange", () => {
-    if (location.hash === "#learn" || location.hash === "#games") showTab(location.hash === "#learn" ? "learn" : "game", true, false);
+    if (hashTab[location.hash]) showTab(hashTab[location.hash], true, false);
   });
 
   // 捲動時導覽列加底色
