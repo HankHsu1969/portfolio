@@ -202,6 +202,7 @@
   }
   .card:hover .thumb::after { opacity: 1; transform: none; }
   .card[data-cat="learn"] .thumb::after { content: "開始學習 →"; }
+  .card[data-cat="app"] .thumb::after { content: "開啟應用 →"; }
   .tag {
     position: absolute; left: 14px; top: 14px; z-index: 1;
     padding: 4px 12px; border-radius: 99px; font-size: .8rem; font-weight: 700;
@@ -259,7 +260,7 @@
     .nav nav { gap: 14px; }
     .nav nav a { font-size: .9rem; }
     .tabs { display: flex; }
-    .tabs button { flex: 1; padding: 10px 8px; font-size: .95rem; }
+    .tabs button { flex: 1; padding: 10px 4px; font-size: .95rem; white-space: nowrap; }
   }
   @media (max-width: 420px) {
     .skills { grid-template-columns: 1fr; }
@@ -279,7 +280,8 @@
     <nav>
       <a href="#games" data-tab="game">遊戲</a>
       <a href="#videos" data-tab="video">影音</a>
-      <a href="#learn" data-tab="learn">線上學習</a>
+      <a href="#apps" data-tab="app">應用</a>
+      <a href="#learn" data-tab="learn">學習</a>
       <a href="https://www.guidestar.com.tw/">返回星方向</a>
     </nav>
   </div>
@@ -293,7 +295,8 @@
         <div class="tabs" role="tablist" aria-label="作品分頁">
           <button role="tab" data-tab="game" aria-selected="true">🎮 遊戲</button>
           <button role="tab" data-tab="video" aria-selected="false">🎬 影音</button>
-          <button role="tab" data-tab="learn" aria-selected="false">📚 線上學習</button>
+          <button role="tab" data-tab="app" aria-selected="false">🧰 應用</button>
+          <button role="tab" data-tab="learn" aria-selected="false">📚 學習</button>
         </div>
         <span class="eyebrow">✦ 網頁遊戲 · 互動學習工具</span>
         <h1>打開瀏覽器<br>就能<em>玩</em>的作品</h1>
@@ -450,6 +453,15 @@
       url: "https://hankhsu1969.github.io/html-web-development-history/",
       desc: "用時間軸看懂網頁三十多年的演進：從 1991 年的純 HTML、CSS、JavaScript、AJAX、jQuery，到 React、Vue、Next.js 與 AI 輔助開發。每個階段都說明解決了什麼問題，並附上可以互動的實際效果與對應程式碼。",
       tech: ["時間軸圖文", "互動範例", "程式碼對照"]
+    },
+    {
+      title: "台股條件篩選器",
+      en: "Taiwan Stock Screener",
+      cat: "app", tag: "應用工具", color: "#4fd1c5",
+      img: "images/stock-screener.webp",
+      url: "https://hank-stock-query2.netlify.app/",
+      desc: "按一下就從 FinMind 開放 API 抓取最新收盤行情，自動算出均線、RSI、MACD 與量比，再用「站上均線、多頭排列、RSI 區間、成交量放大、MACD 黃金交叉」等條件即時篩選，附近 60 日走勢圖。內建權值股、金融股等清單，也能自訂股票代號。僅做技術指標計算，不構成投資建議。",
+      tech: ["FinMind 開放 API", "技術指標計算", "條件即時篩選"]
     }
   ];
 
@@ -549,9 +561,9 @@
   // 離開影音分頁時，暫停正在播放的影片
   const stopVideos = () => players.forEach(p => p?.pauseVideo?.());
 
-  // 分頁：遊戲(game) / 影音(video) / 線上學習(learn)；作品顯示數量為奇數時，最後一張改成寬版
-  const tabHash = { game: "#games", learn: "#learn", video: "#videos" };
-  const hashTab = { "#games": "game", "#learn": "learn", "#videos": "video" };
+  // 分頁：遊戲(game) / 影音(video) / 應用(app) / 學習(learn)；作品顯示數量為奇數時，最後一張改成寬版
+  const tabHash = { game: "#games", video: "#videos", learn: "#learn", app: "#apps" };
+  const hashTab = { "#games": "game", "#videos": "video", "#learn": "learn", "#apps": "app" };
   const showTab = (tab, scroll, updateHash = true) => {
     const isVideo = tab === "video";
     grid.hidden = isVideo;
