@@ -347,24 +347,6 @@
   // 作品資料：要新增作品，只要在這裡加一筆即可
   const works = [
     {
-      title: "喵喵祖瑪",
-      en: "Nyanko Zuma",
-      cat: "game", tag: "遊戲", color: "#ffa3c4",
-      img: "images/zuma.webp",
-      url: "https://hankhsu1969.github.io/ZUMA/",
-      desc: "櫻花和風的祖瑪消除遊戲。操作貓咪砲台發射毛線球，湊齊三顆同色就能消除，別讓球串滾進終點！多個關卡逐步解鎖，還有背景音樂與音效。",
-      tech: ["Canvas 2D", "Web Audio", "關卡系統"]
-    },
-    {
-      title: "萌喵彈射大作戰",
-      en: "Kitty Launch vs. Angry Cats",
-      cat: "game", tag: "遊戲", color: "#ffc25c",
-      img: "images/kitty-launch.webp",
-      url: "https://hankhsu1969.github.io/kitty-launch/",
-      desc: "物理彈射益智遊戲。拖曳彈弓上的小貓、放開發射，利用木頭、石塊和冰塊的物理碰撞，擊垮憤怒貓堆成的高塔，挑戰每關三顆星。",
-      tech: ["Matter.js 物理", "觸控拖曳", "星級評分"]
-    },
-    {
       title: "積木大逃脫",
       en: "Brick Escape",
       cat: "game", tag: "遊戲", color: "#b18cff",
@@ -381,6 +363,42 @@
       url: "https://hankhsu1969.github.io/unblock/",
       desc: "經典滑動木塊益智遊戲。上下左右推開擋路的木塊，讓紅色方塊從右側出口離開。共 50 關、由淺入深，用最少步數過關可拿三顆星，還有上一步、重來與提示功能，進度會自動保存。",
       tech: ["Canvas 2D", "BFS 最少步數求解", "50 道關卡"]
+    },
+    {
+      title: "汪汪數獨",
+      en: "Dogdoku",
+      cat: "game", tag: "遊戲", color: "#f7b267",
+      img: "images/dogdoku.webp",
+      url: "https://hankhsu1969.github.io/DogDoku/",
+      desc: "可愛狗狗邏輯解謎！每個顏色區塊、每一行、每一列都要剛好放一隻狗，而且狗狗不能相鄰，連斜角也不行。共 50 關、5 種狗狗，放錯會扣愛心，卡關時可用骨頭提示，還能長按或拖曳快速標記 ✕。",
+      tech: ["邏輯謎題", "50 道關卡", "骨頭提示系統"]
+    },
+    {
+      title: "喵喵數獨",
+      en: "Meow Sudoku",
+      cat: "game", tag: "遊戲", color: "#f0628c",
+      img: "images/meow-sudoku.webp",
+      url: "https://hankhsu1969.github.io/meow-sudoku/",
+      desc: "和小貓一起玩經典 9×9 數獨！每一橫列、直行和 3×3 宮格都要填入 1～9 且不重複。50 道唯一解謎題分成毛線球到貓咪之王 5 個難度章節，可開筆記、用提示，填錯會失去貓掌，零失誤就能拿三顆星。音樂與音效全由 Web Audio 即時合成。",
+      tech: ["經典數獨", "50 道關卡", "Web Audio 合成音樂"]
+    },
+    {
+      title: "喵喵祖瑪",
+      en: "Nyanko Zuma",
+      cat: "game", tag: "遊戲", color: "#ffa3c4",
+      img: "images/zuma.webp",
+      url: "https://hankhsu1969.github.io/ZUMA/",
+      desc: "櫻花和風的祖瑪消除遊戲。操作貓咪砲台發射毛線球，湊齊三顆同色就能消除，別讓球串滾進終點！多個關卡逐步解鎖，還有背景音樂與音效。",
+      tech: ["Canvas 2D", "Web Audio", "關卡系統"]
+    },
+    {
+      title: "萌喵彈射大作戰",
+      en: "Kitty Launch vs. Angry Cats",
+      cat: "game", tag: "遊戲", color: "#ffc25c",
+      img: "images/kitty-launch.webp",
+      url: "https://hankhsu1969.github.io/kitty-launch/",
+      desc: "物理彈射益智遊戲。拖曳彈弓上的小貓、放開發射，利用木頭、石塊和冰塊的物理碰撞，擊垮憤怒貓堆成的高塔，挑戰每關三顆星。",
+      tech: ["Matter.js 物理", "觸控拖曳", "星級評分"]
     },
     {
       title: "沙堡物語",
@@ -417,15 +435,6 @@
       url: "https://hankhsu1969.github.io/yakyuken/",
       desc: "對著攝影機出拳的日式綜藝猜拳遊戲！跟著喊「アウト！セーフ！よよいのよいっ！」，在最後一聲比出石頭、剪刀或布，AI 即時辨識你的手勢和美咲一決勝負，先贏 4 局就過關。沒有攝影機也能用按鈕或鍵盤 1、2、3 出拳。",
       tech: ["MediaPipe 手勢辨識", "攝影機互動", "綜藝音效"]
-    },
-    {
-      title: "汪汪數獨",
-      en: "Dogdoku",
-      cat: "game", tag: "遊戲", color: "#f7b267",
-      img: "images/dogdoku.webp",
-      url: "https://hankhsu1969.github.io/DogDoku/",
-      desc: "可愛狗狗邏輯解謎！每個顏色區塊、每一行、每一列都要剛好放一隻狗，而且狗狗不能相鄰，連斜角也不行。共 50 關、5 種狗狗，放錯會扣愛心，卡關時可用骨頭提示，還能長按或拖曳快速標記 ✕。",
-      tech: ["邏輯謎題", "50 道關卡", "骨頭提示系統"]
     },
     {
       title: "水果盤",
