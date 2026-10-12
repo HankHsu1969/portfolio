@@ -4,10 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AI 應用 | 星方向 Guide Star 教育學院</title>
-<meta name="description" content="Hank 的網頁作品集：互動式 Git 教學、貓咪祖瑪、萌喵彈射、3D 麻將塔等瀏覽器遊戲與工具。">
-<meta property="og:title" content="Hank 的作品集">
-<meta property="og:description" content="打開瀏覽器就能玩的遊戲與互動學習工具">
-<meta property="og:image" content="images/hero.webp">
+<meta name="description" content="星方向 AI 應用作品集 — 瀏覽器遊戲 × 應用工具 × 影音 × 互動學習，打開瀏覽器就能直接玩、直接用｜星方向 Guide Star 教育學院">
+<meta property="og:title" content="AI 應用 | 星方向 Guide Star 教育學院">
+<meta property="og:description" content="星方向 AI 應用作品集 — 瀏覽器遊戲 × 應用工具 × 影音 × 互動學習，打開瀏覽器就能直接玩、直接用">
+<!-- LINE、Facebook 要完整網址才抓得到預覽圖 -->
+<meta property="og:image" content="https://hankhsu1969.github.io/portfolio/images/hero.webp">
 <!-- 小圖示：星方向 LOGO 的金色星星，深藍底 -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23FCD34D'/%3E%3Cstop offset='1' stop-color='%23F59E0B'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='%2307101F'/%3E%3Cpath d='M16 5.7L18.8 13.1L26.7 13.4L20.5 18.4L22.6 26L16 21.6L9.4 26L11.5 18.4L5.3 13.4L13.2 13.1Z' fill='url(%23g)' stroke='url(%23g)' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -286,8 +287,6 @@
   .skill b { display: block; font-size: 1.4rem; line-height: 1.2; margin-bottom: 4px; }
   .skill span { color: var(--muted); font-size: .88rem; }
 
-  footer { padding: 40px 0 50px; color: var(--muted); font-size: .88rem; text-align: center; }
-  footer a { color: var(--accent-2); }
 
   /* 進場動畫 */
   .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s, transform .7s cubic-bezier(.2,.8,.2,1); }
@@ -394,7 +393,7 @@
         <div>
           <h2>關於我</h2>
           <p>我是 Hank，喜歡用網頁技術把想法變成看得到、玩得到的東西。每個作品都是純前端、部署在 GitHub Pages 與 Netlify，手機和電腦都能直接開來玩。</p>
-          <a class="btn" href="https://www.guidestar.com.tw/" target="_blank" rel="noopener">星方向 AI 學院 ↗</a>
+          <a class="btn" href="https://www.guidestar.com.tw/">星方向 AI 學院 ↗</a>
         </div>
         <div class="skills">
           <div class="skill"><b>🎮</b><span>Canvas 2D 遊戲開發</span></div>
@@ -406,10 +405,6 @@
     </div>
   </section>
 </main>
-
-<footer>
-  <div class="wrap">© <span id="yr"></span> Hank · 作品託管於 <a href="https://github.com/HankHsu1969" target="_blank" rel="noopener">GitHub Pages</a></div>
-</footer>
 
 <script>
   // 作品資料：要新增作品，只要在這裡加一筆即可
@@ -658,7 +653,6 @@
     </a>`).join("");
   document.getElementById("count").textContent = works.length;
   document.getElementById("game-count").textContent = works.filter(w => w.cat === "game").length;
-  document.getElementById("yr").textContent = new Date().getFullYear();
 
   // 影音作品：嵌入 YouTube 播放清單，用 IFrame 播放器 API 取得清單內所有影片並列出來
   // 到 YouTube 調整播放清單裡的影片，這裡重新整理就會跟著更新；要新增分類，在 videoGroups 加一筆播放清單 ID
