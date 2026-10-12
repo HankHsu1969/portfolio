@@ -12,6 +12,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Huninn&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- 導覽列 LOGO 用的粗體與英文字型（跟星方向官網一樣），只取用到的字，檔案很小 -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@900&family=Inter:wght@500&text=%E6%98%9F%E6%96%B9%E5%90%91%20AI%E6%95%99%E8%82%B2%E5%AD%B8%E9%99%A2GUIDINGSTARACEMY&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0f1024;
@@ -24,6 +26,8 @@
     --accent-2: #ffc25c;
     --radius: 20px;
     --shadow: 0 18px 50px -20px rgba(0,0,0,.7);
+    --gold: #F59E0B;
+    --gold-light: #FCD34D;
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -39,18 +43,71 @@
   img { display: block; max-width: 100%; }
   .wrap { width: min(1160px, 100% - 32px); margin-inline: auto; }
 
-  /* ---------- 導覽列 ---------- */
+  /* ---------- 導覽列（跟星方向官網 www.guidestar.com.tw 一樣） ---------- */
   .nav {
-    position: fixed; inset: 0 0 auto; z-index: 10;
-    transition: background .3s, backdrop-filter .3s;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    padding: 20px 0; line-height: 1.6; transition: all .3s ease;
   }
-  .nav.scrolled { background: rgba(15,16,36,.78); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
-  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
-  .brand { font-family: "Huninn", sans-serif; font-size: 1.3rem; text-decoration: none; display: flex; align-items: center; gap: 10px; }
-  .brand i { width: 30px; height: 30px; border-radius: 9px; background: var(--accent); display: grid; place-items: center; font-style: normal; font-weight: 700; color: #fff; }
-  .nav nav { display: flex; gap: 22px; }
-  .nav nav a { text-decoration: none; color: var(--muted); font-size: .95rem; transition: color .2s; }
-  .nav nav a:hover { color: var(--text); }
+  .nav.scrolled {
+    background: rgba(7,16,31,.96); backdrop-filter: blur(12px);
+    padding: 12px 0; box-shadow: 0 2px 20px rgba(0,0,0,.35);
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto; padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo-icon { font-size: 26px; filter: drop-shadow(0 0 8px rgba(245,158,11,.9)); }
+  .nav-logo-main { font-size: 20px; font-weight: 900; color: #fff; letter-spacing: 1px; line-height: 1; }
+  .nav-logo-sub { font-size: 10px; color: var(--gold); letter-spacing: 2px; font-family: "Inter", sans-serif; font-weight: 500; }
+  .nav-links, .nav-dd-menu { list-style: none; margin: 0; padding: 0; }
+  .nav-links { display: flex; align-items: center; gap: 34px; }
+  .nav-links a {
+    color: rgba(255,255,255,.8); text-decoration: none; font-size: 15px; font-weight: 500;
+    transition: all .3s ease; position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 2px; background: var(--gold); transition: width .3s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+  .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+  .nav-dd { position: relative; }
+  .nav-caret { font-size: 10px; margin-left: 4px; opacity: .7; }
+  .nav-dd-menu {
+    position: absolute; top: calc(100% + 14px); left: 50%;
+    min-width: 140px; padding: 8px 0;
+    background: rgba(7,16,31,.98); border: 1px solid rgba(255,255,255,.1); border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.35);
+    opacity: 0; visibility: hidden; transform: translate(-50%, 8px); transition: all .3s ease;
+  }
+  .nav-dd-menu::before { content: ''; position: absolute; left: 0; right: 0; top: -14px; height: 14px; }
+  .nav-dd-menu a { display: block; padding: 10px 22px; font-size: 14px; white-space: nowrap; }
+  .nav-dd-menu a::after { display: none; }
+  .nav-dd-menu a:hover { background: rgba(255,255,255,.06); }
+  .nav-dd-menu a.on { color: var(--gold); }
+  @media (min-width: 769px) {
+    .nav-dd:hover .nav-dd-menu,
+    .nav-dd:focus-within .nav-dd-menu { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+  }
+  .nav-ham { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px 0; background: none; border: 0; }
+  .nav-ham span { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: all .3s ease; }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-ham { display: flex; }
+    .nav-links.open {
+      display: flex; flex-direction: column; align-items: flex-start; position: absolute;
+      top: 100%; left: 0; right: 0; background: rgba(7,16,31,.98);
+      padding: 20px 24px; gap: 16px; border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .nav-dd-menu {
+      position: static; transform: none; opacity: 1; visibility: visible;
+      min-width: 0; padding: 10px 0 0 16px; background: none; border: 0; box-shadow: none;
+    }
+    .nav-dd-menu::before, .nav-caret { display: none; }
+    .nav-dd-menu a { padding: 6px 0; }
+    .nav-dd-menu a:hover { background: none; }
+  }
 
   /* ---------- 主視覺 ---------- */
   .hero {
@@ -66,7 +123,7 @@
       linear-gradient(90deg, rgba(15,16,36,.92) 0%, rgba(15,16,36,.65) 38%, rgba(15,16,36,0) 70%),
       linear-gradient(0deg, var(--bg) 0%, rgba(15,16,36,0) 28%);
   }
-  .hero .wrap { position: relative; padding-block: 96px 80px; }
+  .hero .wrap { position: relative; padding-block: 114px 80px; }
   .hero-img { display: none; }
   .hero-text { max-width: 540px; }
   .eyebrow {
@@ -115,7 +172,6 @@
     background: linear-gradient(135deg, var(--accent), #ff6f7d); color: #fff;
     box-shadow: 0 8px 22px -10px rgba(255,111,125,.9);
   }
-  .nav nav a.on { color: var(--text); }
 
   .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
   .card {
@@ -244,7 +300,6 @@
     .card.wide .thumb { flex: none; aspect-ratio: 16 / 10; min-height: 0; }
     .card.wide .body { padding: 22px 24px 24px; }
     .about { grid-template-columns: 1fr; }
-    .nav nav { gap: 16px; }
     .hero { display: block; min-height: 0; background: var(--bg); }
     .hero::before { display: none; }
     .hero-img { display: block; position: relative; }
@@ -256,9 +311,6 @@
     .thumb::after { opacity: 1; transform: none; }
   }
   @media (max-width: 520px) {
-    .brand span { display: none; }
-    .nav nav { gap: 14px; }
-    .nav nav a { font-size: .9rem; }
     .tabs { display: flex; }
     .tabs button { flex: 1; padding: 10px 4px; font-size: .95rem; white-space: nowrap; }
   }
@@ -266,8 +318,6 @@
     .skills { grid-template-columns: 1fr; }
   }
   @media (max-width: 360px) {
-    .nav nav { gap: 10px; }
-    .nav nav a { font-size: .84rem; }
     .tabs button { font-size: .85rem; padding: 10px 4px; white-space: nowrap; }
   }
 </style>
@@ -275,16 +325,33 @@
 <body>
 
 <header class="nav" id="nav">
-  <div class="wrap">
-    <a class="brand" href="#top"><i>H</i><span>Hank 的作品集</span></a>
-    <nav>
-      <a href="#games" data-tab="game">遊戲</a>
-      <a href="#apps" data-tab="app">應用</a>
-      <a href="#videos" data-tab="video">影音</a>
-      <a href="#learn" data-tab="learn">學習</a>
-      <a href="https://www.guidestar.com.tw/">返回星方向</a>
-    </nav>
-  </div>
+  <nav class="nav-inner">
+    <a href="https://www.guidestar.com.tw/" class="nav-logo">
+      <span class="nav-logo-icon">⭐</span>
+      <div>
+        <div class="nav-logo-main">星方向 AI 教育學院</div>
+        <div class="nav-logo-sub">GUIDING STAR ACADEMY</div>
+      </div>
+    </a>
+    <ul class="nav-links" id="navMenu">
+      <li><a href="https://www.guidestar.com.tw/">首頁</a></li>
+      <li class="nav-dd">
+        <a href="#top" class="active" aria-current="page">AI 應用<span class="nav-caret">▾</span></a>
+        <ul class="nav-dd-menu">
+          <li><a href="#games" data-tab="game">遊戲</a></li>
+          <li><a href="#apps" data-tab="app">應用</a></li>
+          <li><a href="#videos" data-tab="video">影音</a></li>
+          <li><a href="#learn" data-tab="learn">學習</a></li>
+        </ul>
+      </li>
+      <li><a href="https://www.guidestar.com.tw/blog">部落格</a></li>
+      <li><a href="https://www.guidestar.com.tw/enterprise/">企業應用</a></li>
+      <li><a href="https://www.guidestar.com.tw/course">近期課程</a></li>
+    </ul>
+    <button class="nav-ham" id="ham" type="button" aria-label="選單" aria-expanded="false" aria-controls="navMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
 </header>
 
 <main id="top">
@@ -683,7 +750,7 @@
     cards.forEach(c => c.classList.remove("wide"));
     if (shown.length % 2) shown.at(-1).classList.add("wide");
     document.querySelectorAll(".tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === tab));
-    document.querySelectorAll(".nav nav a[data-tab]").forEach(a => a.classList.toggle("on", a.dataset.tab === tab));
+    document.querySelectorAll(".nav-dd-menu a[data-tab]").forEach(a => a.classList.toggle("on", a.dataset.tab === tab));
     if (updateHash) history.replaceState(null, "", tabHash[tab]);
     if (scroll) document.getElementById("works").scrollIntoView({ behavior: "smooth" });
   };
@@ -703,8 +770,15 @@
 
   // 捲動時導覽列加底色
   const nav = document.getElementById("nav");
-  const onScroll = () => nav.classList.toggle("scrolled", scrollY > 30);
+  const onScroll = () => nav.classList.toggle("scrolled", scrollY > 50);
   addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+  // 手機版選單：漢堡按鈕開關，點了選單裡的連結就收起來
+  const navMenu = document.getElementById("navMenu");
+  const ham = document.getElementById("ham");
+  const setMenu = open => { navMenu.classList.toggle("open", open); ham.setAttribute("aria-expanded", open); };
+  ham.addEventListener("click", () => setMenu(!navMenu.classList.contains("open")));
+  navMenu.querySelectorAll("a").forEach(a => a.addEventListener("click", () => setMenu(false)));
 
   // 進場動畫
   const io = new IntersectionObserver(es => es.forEach(e => {
