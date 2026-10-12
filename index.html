@@ -279,8 +279,8 @@
     <a class="brand" href="#top"><i>H</i><span>Hank 的作品集</span></a>
     <nav>
       <a href="#games" data-tab="game">遊戲</a>
-      <a href="#videos" data-tab="video">影音</a>
       <a href="#apps" data-tab="app">應用</a>
+      <a href="#videos" data-tab="video">影音</a>
       <a href="#learn" data-tab="learn">學習</a>
       <a href="https://www.guidestar.com.tw/">返回星方向</a>
     </nav>
@@ -294,8 +294,8 @@
       <div class="hero-text reveal">
         <div class="tabs" role="tablist" aria-label="作品分頁">
           <button role="tab" data-tab="game" aria-selected="true">🎮 遊戲</button>
-          <button role="tab" data-tab="video" aria-selected="false">🎬 影音</button>
           <button role="tab" data-tab="app" aria-selected="false">🧰 應用</button>
+          <button role="tab" data-tab="video" aria-selected="false">🎬 影音</button>
           <button role="tab" data-tab="learn" aria-selected="false">📚 學習</button>
         </div>
         <span class="eyebrow">✦ 網頁遊戲 · 互動學習工具</span>
@@ -491,6 +491,42 @@
       tech: ["sql.js (WebAssembly)", "SQL 編輯器", "10 個範例查詢"]
     },
     {
+      title: "Meta 廣告成效儀表板",
+      en: "Meta Ads Performance Dashboard",
+      cat: "app", tag: "應用工具", color: "#38bdf8",
+      img: "images/meta-ads-dashboard.webp",
+      url: "https://fbads-mcp-hank.netlify.app/",
+      desc: "以健康食品電商「元氣工坊」為例的 Meta 廣告 6 個月成效分析。花費、轉換金額、ROAS、CPA、CTR、頻率一次看懂，還拆解受眾、素材格式、年齡層與轉換漏斗，自動標出紅黃燈健康度警訊並給出改善建議。使用模擬示範資料。",
+      tech: ["Chart.js", "廣告數據分析", "健康度警訊"]
+    },
+    {
+      title: "品牌健康度報告",
+      en: "Brand Health Report",
+      cat: "app", tag: "應用工具", color: "#4ade80",
+      img: "images/brand-health-report.webp",
+      url: "https://hankhsu1969.github.io/Marketing-Analytic-demo/",
+      desc: "以寵物品牌「光禾寵物生活館」為例的客戶評價分析報告。整理官網、蝦皮、LINE 購物的評價，算出品牌健康度總分，用七維雷達圖、情感分類、評分分布、通路與產品線比較，找出最需要改善的環節。",
+      tech: ["評價情感分析", "七維雷達圖", "通路比較"]
+    },
+    {
+      title: "ScrewMES 智慧製造執行系統",
+      en: "ScrewMES",
+      cat: "app", tag: "應用工具", color: "#60a5fa",
+      img: "images/screw-mes.webp",
+      url: "https://screw-mes.onrender.com/",
+      desc: "為螺絲工廠打造的製造執行系統展示。總覽儀表板即時呈現產量、OEE、良率、工單與異常警報，另有生產工單、設備監控、批次追溯、SPC 品質管理、物料庫存、人員排班與報表分析等模組。介面與資料皆為模擬展示。",
+      tech: ["MES 系統", "OEE 設備監控", "SPC 品質管理"]
+    },
+    {
+      title: "速來得網購團購網",
+      en: "Sulaide Frozen Food Market",
+      cat: "app", tag: "應用工具", color: "#fb923c",
+      img: "images/sulaide-frozen-food.webp",
+      url: "https://sulaide-frozen-food.netlify.app/",
+      desc: "冷凍調理食品的網購團購網站。包含品牌故事、商品列表、購物車、會員資料與團購揪團，還有後台管理，商品與會員資料存放在 Supabase 雲端資料庫。",
+      tech: ["Supabase 資料庫", "購物車與會員", "後台管理"]
+    },
+    {
       title: "台股條件篩選器",
       en: "Taiwan Stock Screener",
       cat: "app", tag: "應用工具", color: "#4fd1c5",
@@ -624,7 +660,7 @@
   // 離開影音分頁時，暫停正在播放的影片
   const stopVideos = () => players.forEach(p => p?.pauseVideo?.());
 
-  // 分頁：遊戲(game) / 影音(video) / 應用(app) / 學習(learn)；作品顯示數量為奇數時，最後一張改成寬版
+  // 分頁：遊戲(game) / 應用(app) / 影音(video) / 學習(learn)；作品顯示數量為奇數時，最後一張改成寬版
   const tabHash = { game: "#games", video: "#videos", learn: "#learn", app: "#apps" };
   const hashTab = { "#games": "game", "#videos": "video", "#learn": "learn", "#apps": "app" };
   const showTab = (tab, scroll, updateHash = true) => {
