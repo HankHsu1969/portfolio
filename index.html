@@ -159,37 +159,31 @@
   /* ---------- 作品區 ---------- */
   section { padding-block: 80px; scroll-margin-top: 40px; }
   /* 分頁切換 */
-  /* 分頁按鈕：H 站產生的圓形圖示徽章＋文字，玻璃質感；選中的用珊瑚橘漸層與光暈標示 */
-  .tabs {
-    display: inline-flex; gap: 10px; padding: 8px; margin-bottom: 24px;
-    background: rgba(10, 11, 28, .72); backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,.14); border-radius: 99px;
-    box-shadow: 0 18px 40px -16px rgba(0,0,0,.85);
-  }
+  /* 分頁按鈕：H 站產生的藍色去背圖示＋文字。未選中是深藍玻璃，選中是冰白底＋藍色光暈（藍圖示在白底上最清楚） */
+  .tabs { display: inline-flex; gap: 12px; margin-bottom: 24px; }
   .tabs button {
     display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
     font: inherit; font-size: 1.02rem; font-weight: 600; letter-spacing: .08em; cursor: pointer;
     padding: 7px 18px 7px 12px; border-radius: 99px;
-    border: 1px solid rgba(255,255,255,.12);
-    background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
-    color: #f1eef8;
+    border: 1px solid rgba(120,170,255,.22);
+    background: linear-gradient(180deg, rgba(37,99,235,.22), rgba(30,64,175,.08));
+    color: #dbe8ff;
     transition: background .3s, color .3s, box-shadow .3s, border-color .3s, transform .25s;
   }
   .tabs img {
     width: 40px; height: 40px; flex: none; object-fit: contain;
-    filter: drop-shadow(0 3px 5px rgba(0,0,0,.35));
     transition: transform .35s cubic-bezier(.2,.8,.2,1);
   }
   .tabs button:hover {
-    background: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.06));
-    border-color: rgba(255,190,150,.55); color: #fff; transform: translateY(-1px);
+    background: linear-gradient(180deg, rgba(59,130,246,.36), rgba(37,99,235,.18));
+    border-color: rgba(147,197,253,.65); color: #fff; transform: translateY(-1px);
   }
   .tabs button:hover img { transform: scale(1.08) rotate(-4deg); }
-  .tabs button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; }
+  .tabs button:focus-visible { outline: 3px solid #60a5fa; outline-offset: 2px; }
   .tabs button[aria-selected="true"] {
-    background: linear-gradient(135deg, rgba(255,138,91,.96), rgba(255,111,125,.96)); color: #fff;
-    border-color: rgba(255,255,255,.55);
-    box-shadow: 0 0 0 3px rgba(255,138,91,.22), 0 12px 28px -10px rgba(255,111,125,.95);
+    background: linear-gradient(180deg, #ffffff, #e2edff); color: #0d1f4d;
+    border-color: rgba(255,255,255,.95);
+    box-shadow: 0 0 0 3px rgba(96,165,250,.38), 0 12px 28px -10px rgba(59,130,246,.95);
   }
 
   .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
@@ -329,7 +323,7 @@
   }
   @media (max-width: 520px) {
     /* 手機：圖示在上、文字在下的直式小卡 */
-    .tabs { display: flex; gap: 6px; padding: 6px; border-radius: 24px; }
+    .tabs { display: flex; gap: 8px; }
     .tabs button {
       flex: 1; flex-direction: column; gap: 5px; padding: 8px 4px 7px;
       border-radius: 18px; font-size: .88rem; letter-spacing: .04em; white-space: nowrap;
@@ -340,7 +334,7 @@
     .skills { grid-template-columns: 1fr; }
   }
   @media (max-width: 360px) {
-    .tabs { gap: 4px; padding: 5px; }
+    .tabs { gap: 6px; }
     .tabs button { font-size: .82rem; padding: 7px 2px 6px; }
     .tabs img { width: 32px; height: 32px; }
   }
@@ -387,10 +381,10 @@
         <h1>打開瀏覽器<br>就能<em>玩</em>的作品</h1>
         <p>我喜歡把點子做成可以直接上手的網頁：從教你學 Git 的互動練功房，到一整群可愛貓咪登場的休閒遊戲，還有能旋轉視角的 3D 麻將塔。</p>
         <div class="tabs" role="tablist" aria-label="作品分頁">
-          <button role="tab" data-tab="game" aria-selected="true"><img src="images/tabs/game.webp?v=2" alt="" width="40" height="40"><span>遊戲</span></button>
-          <button role="tab" data-tab="app" aria-selected="false"><img src="images/tabs/app.webp?v=2" alt="" width="40" height="40"><span>應用</span></button>
-          <button role="tab" data-tab="video" aria-selected="false"><img src="images/tabs/video.webp?v=2" alt="" width="40" height="40"><span>影音</span></button>
-          <button role="tab" data-tab="learn" aria-selected="false"><img src="images/tabs/learn.webp?v=2" alt="" width="40" height="40"><span>學習</span></button>
+          <button role="tab" data-tab="game" aria-selected="true"><img src="images/tabs/game.webp?v=3" alt="" width="40" height="40"><span>遊戲</span></button>
+          <button role="tab" data-tab="app" aria-selected="false"><img src="images/tabs/app.webp?v=3" alt="" width="40" height="40"><span>應用</span></button>
+          <button role="tab" data-tab="video" aria-selected="false"><img src="images/tabs/video.webp?v=3" alt="" width="40" height="40"><span>影音</span></button>
+          <button role="tab" data-tab="learn" aria-selected="false"><img src="images/tabs/learn.webp?v=3" alt="" width="40" height="40"><span>學習</span></button>
         </div>
         <div class="stats">
           <div><b id="count">4</b><span>線上作品</span></div>
