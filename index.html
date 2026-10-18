@@ -283,7 +283,14 @@
   .body p { margin: 12px 0 18px; color: #cfcce0; font-size: .97rem; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
   .chips span { font-size: .78rem; padding: 3px 10px; border-radius: 6px; background: rgba(255,255,255,.06); color: var(--muted); border: 1px solid var(--line); }
-  .url { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line); font-size: .82rem; color: var(--accent-2); word-break: break-all; }
+  .url {
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 12px;
+    margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line); font-size: .82rem; color: var(--accent-2);
+  }
+  .url > span:first-child { min-width: 0; word-break: break-all; }
+  /* 右下角的點選次數（所有訪客共用，存在 Supabase） */
+  .clicks { flex: none; color: var(--muted); font-size: .8rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .clicks:empty { display: none; }
 
   /* ---------- 關於 ---------- */
   .about {
@@ -477,6 +484,24 @@
       url: "https://hankhsu1969.github.io/one-tap-chain/",
       desc: "每關只能點一次的連鎖益智遊戲！選一個機關引爆，讓炸彈、火箭、電球一路接力，把棋盤上的東西炸光。每關只有一個起點能全部清光，還藏著看起來像起點的假源頭。共 100 關，每 10 關登場一種新機關，像是鏡子、傳送門、定時炸彈和黑洞。",
       tech: ["連鎖反應模擬", "100 關（唯一解驗證）", "Web Audio 即時配樂"]
+    },
+    {
+      title: "星墜之境：艾爾德拉傳說",
+      en: "Starfall: Legend of Eldra",
+      cat: "game", tag: "遊戲", color: "#8fa8ff",
+      img: "images/starfall-rpg.webp",
+      url: "https://starfall-rpg-pi.vercel.app/",
+      desc: "玩法參考楓之谷的 2.5D 橫向捲軸 RPG，五個章節劇情完整。從墜星森林、風鳴港、熔岩礦城、霜語雪原一路打到 14 層的天穹之塔，有水中戰鬥、冰面滑行、爬梯與暴風雪等關卡機關，打倒各章頭目、蒐集線索解謎；換上特定鎧甲角色外觀會跟著改變，找齊五頁日記還能看到真結局。進度會自動存檔。",
+      tech: ["HTML5 Canvas", "五章完整劇情", "Web Audio 合成音樂"]
+    },
+    {
+      title: "帝國紀元：五大文明",
+      en: "Imperium: Age of Five Empires",
+      cat: "game", tag: "遊戲", color: "#e8b54a",
+      img: "images/age-of-empire.webp",
+      url: "https://age-of-empire-rose.vercel.app/",
+      desc: "2.5D 等角視角的即時戰略遊戲。第一章帶領羅馬帝國出征高盧：指揮村民採集食物、木材、黃金與石頭，蓋民宅、兵營與瞭望塔，從王政時代一路升級到帝國時代，再用軍團兵、弓箭手、騎兵與投石車攻破高盧部落。兵種彼此相剋，可框選、編隊、設集結點，有三種難度並每 2 分鐘自動存檔。古埃及、古希臘、波斯與大漢帝國將在後續章節登場。",
+      tech: ["即時戰略", "等角地圖與尋路", "三種難度 AI"]
     },
     {
       title: "喵喵祖瑪",
@@ -705,6 +730,8 @@
     }
   ];
 
+  // 點選次數的代號：作品網址去掉 https:// 和結尾的 /，新增作品不用另外設定
+  const clickKey = url => url.replace(/^https?:\/\//, "").replace(/\/$/, "");
   const grid = document.getElementById("grid");
   grid.innerHTML = works.map(w => `
     <a class="card reveal" data-cat="${w.cat}" href="${w.url}" style="--tag:${w.color}">
@@ -717,11 +744,46 @@
         <div class="en">${w.en}</div>
         <p>${w.desc}</p>
         <div class="chips">${w.tech.map(t => `<span>${t}</span>`).join("")}</div>
-        <div class="url">${w.url.replace("https://", "")}</div>
+        <div class="url"><span>${w.url.replace("https://", "")}</span><span class="clicks" data-key="${clickKey(w.url)}" title="被點開執行的次數"></span></div>
       </div>
     </a>`).join("");
   document.getElementById("count").textContent = works.length;
   document.getElementById("game-count").textContent = works.filter(w => w.cat === "game").length;
+
+  // 點選次數：存在 Supabase「Guiding Star Website」專案的 work_clicks 資料表，所有訪客共用
+  // 這把是公開金鑰（publishable key），資料表只開放讀取，加次數只能透過 increment_work_click 函式 +1
+  const CLICKS_API = "https://eflwhwvfgsrliwyhcmrg.supabase.co/rest/v1";
+  const CLICKS_HEADERS = { apikey: "sb_publishable_agdqPaXaBhThzaGoEPaGkw_SakwZQEU", "Content-Type": "application/json" };
+  const showClicks = (el, n) => { el.textContent = Number(n).toLocaleString(); };
+  fetch(`${CLICKS_API}/work_clicks?select=slug,count`, { headers: CLICKS_HEADERS })
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(rows => {
+      const counts = Object.fromEntries(rows.map(r => [r.slug, r.count]));
+      grid.querySelectorAll(".clicks").forEach(el => showClicks(el, counts[el.dataset.key] || 0));
+    })
+    .catch(() => {}); // 讀不到就不顯示，作品照常能點
+  const countClick = card => {
+    const el = card.querySelector(".clicks");
+    return fetch(`${CLICKS_API}/rpc/increment_work_click`, {
+      method: "POST", headers: CLICKS_HEADERS, keepalive: true,
+      body: JSON.stringify({ p_slug: el.dataset.key }),
+    }).then(r => r.ok ? r.json() : null).then(n => { if (n != null && el.textContent) showClicks(el, n); }).catch(() => {});
+  };
+  grid.addEventListener("click", e => {
+    const card = e.target.closest(".card");
+    if (!card) return;
+    const sent = countClick(card);
+    // 在同一個分頁開啟時，先等次數送出（最多 0.6 秒）再換頁，避免換頁時請求被取消
+    if (e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+      e.preventDefault();
+      Promise.race([sent, new Promise(r => setTimeout(r, 600))]).then(() => { location.href = card.href; });
+    }
+  });
+  // 滑鼠中鍵開新分頁也算一次
+  grid.addEventListener("auxclick", e => {
+    const card = e.target.closest(".card");
+    if (card && e.button === 1) countClick(card);
+  });
 
   // 影音作品：嵌入 YouTube 播放清單，用 IFrame 播放器 API 取得清單內所有影片並列出來
   // 到 YouTube 調整播放清單裡的影片，這裡重新整理就會跟著更新；要新增分類，在 videoGroups 加一筆播放清單 ID
