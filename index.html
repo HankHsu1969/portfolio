@@ -272,11 +272,13 @@
   .card:hover .thumb::after { opacity: 1; transform: none; }
   .card[data-cat="learn"] .thumb::after { content: "開始學習 →"; }
   .card[data-cat="app"] .thumb::after { content: "開啟應用 →"; }
+  /* 縮圖左上角的標籤：類別 + 額外標籤（例如「PC桌上版」） */
+  .tags { position: absolute; left: 14px; top: 14px; z-index: 1; display: flex; flex-wrap: wrap; gap: 6px; }
   .tag {
-    position: absolute; left: 14px; top: 14px; z-index: 1;
     padding: 4px 12px; border-radius: 99px; font-size: .8rem; font-weight: 700;
     background: var(--tag, var(--accent)); color: #1a1026;
   }
+  .tag.badge { background: rgba(15,16,36,.82); color: #fff; box-shadow: inset 0 0 0 1px rgba(255,255,255,.35); backdrop-filter: blur(6px); }
   .body { padding: 22px 24px 24px; display: flex; flex-direction: column; flex: 1; }
   .body h3 { margin: 0 0 2px; font-size: 1.35rem; font-weight: 700; line-height: 1.4; }
   .body .en { color: var(--muted); font-size: .85rem; letter-spacing: .03em; }
@@ -488,7 +490,7 @@
     {
       title: "星墜之境：艾爾德拉傳說",
       en: "Starfall: Legend of Eldra",
-      cat: "game", tag: "遊戲", color: "#8fa8ff",
+      cat: "game", tag: "遊戲", color: "#8fa8ff", badges: ["PC桌上版"],
       img: "images/starfall-rpg.webp",
       url: "https://starfall-rpg-pi.vercel.app/",
       desc: "玩法參考楓之谷的 2.5D 橫向捲軸 RPG，五個章節劇情完整。從墜星森林、風鳴港、熔岩礦城、霜語雪原一路打到 14 層的天穹之塔，有水中戰鬥、冰面滑行、爬梯與暴風雪等關卡機關，打倒各章頭目、蒐集線索解謎；換上特定鎧甲角色外觀會跟著改變，找齊五頁日記還能看到真結局。進度會自動存檔。",
@@ -497,7 +499,7 @@
     {
       title: "帝國紀元：五大文明",
       en: "Imperium: Age of Five Empires",
-      cat: "game", tag: "遊戲", color: "#e8b54a",
+      cat: "game", tag: "遊戲", color: "#e8b54a", badges: ["PC桌上版"],
       img: "images/age-of-empire.webp",
       url: "https://age-of-empire-rose.vercel.app/",
       desc: "2.5D 等角視角的即時戰略遊戲。第一章帶領羅馬帝國出征高盧：指揮村民採集食物、木材、黃金與石頭，蓋民宅、兵營與瞭望塔，從王政時代一路升級到帝國時代，再用軍團兵、弓箭手、騎兵與投石車攻破高盧部落。兵種彼此相剋，可框選、編隊、設集結點，有三種難度並每 2 分鐘自動存檔。古埃及、古希臘、波斯與大漢帝國將在後續章節登場。",
@@ -506,7 +508,7 @@
     {
       title: "喵喵祖瑪",
       en: "Nyanko Zuma",
-      cat: "game", tag: "遊戲", color: "#ffa3c4",
+      cat: "game", tag: "遊戲", color: "#ffa3c4", badges: ["PC桌上版"],
       img: "images/zuma.webp",
       url: "https://hankhsu1969.github.io/ZUMA/",
       desc: "櫻花和風的祖瑪消除遊戲。操作貓咪砲台發射毛線球，湊齊三顆同色就能消除，別讓球串滾進終點！多個關卡逐步解鎖，還有背景音樂與音效。",
@@ -515,7 +517,7 @@
     {
       title: "萌喵彈射大作戰",
       en: "Kitty Launch vs. Angry Cats",
-      cat: "game", tag: "遊戲", color: "#ffc25c",
+      cat: "game", tag: "遊戲", color: "#ffc25c", badges: ["PC桌上版"],
       img: "images/kitty-launch.webp",
       url: "https://hankhsu1969.github.io/kitty-launch/",
       desc: "物理彈射益智遊戲。拖曳彈弓上的小貓、放開發射，利用木頭、石塊和冰塊的物理碰撞，擊垮憤怒貓堆成的高塔，挑戰每關三顆星。",
@@ -736,7 +738,7 @@
   grid.innerHTML = works.map(w => `
     <a class="card reveal" data-cat="${w.cat}" href="${w.url}" style="--tag:${w.color}">
       <div class="thumb">
-        <span class="tag">${w.tag}</span>
+        <div class="tags"><span class="tag">${w.tag}</span>${(w.badges || []).map(b => `<span class="tag badge">${b}</span>`).join("")}</div>
         <img src="${w.img}" alt="${w.title} 畫面截圖" loading="lazy" width="960" height="600">
       </div>
       <div class="body">
