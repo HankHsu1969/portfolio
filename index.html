@@ -201,7 +201,7 @@
   .card.wide .thumb { flex: 0 0 58%; aspect-ratio: auto; min-height: 340px; }
   .card.wide .body { justify-content: center; padding: 32px 36px; }
   .card.wide .chips { margin-top: 0; }
-  .grid[hidden], .videos[hidden] { display: none; }
+  .grid[hidden], .videos[hidden], .stores[hidden] { display: none; }
 
   /* ---------- 影音作品：嵌入 YouTube 播放清單（播放器＋清單內所有影片），內容即時跟著 YouTube 更新 ---------- */
   .v-intro { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 36px; }
@@ -307,6 +307,25 @@
   .skill b { display: block; font-size: 1.4rem; line-height: 1.2; margin-bottom: 4px; }
   .skill span { color: var(--muted); font-size: .88rem; }
 
+  /* ---------- 上架官方商店（只在應用分頁、所有作品上方顯示） ---------- */
+  .stores {
+    display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: center; margin-bottom: 28px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: clamp(24px, 4vw, 40px);
+  }
+  .stores h2 { font-family: "Huninn", sans-serif; font-weight: 400; font-size: clamp(1.4rem, 3.4vw, 1.8rem); margin: 0 0 10px; }
+  .stores p { color: #d4d1e4; margin: 0; }
+  .store-links { display: grid; gap: 12px; }
+  .store-link {
+    display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 16px;
+    background: rgba(255,255,255,.05); border: 1px solid var(--line); text-decoration: none;
+    transition: transform .2s, border-color .2s, background .2s;
+  }
+  .store-link:hover { transform: translateY(-2px); border-color: rgba(255,138,91,.5); background: rgba(255,255,255,.08); }
+  .store-link img { width: 56px; height: 56px; border-radius: 13px; flex: none; }
+  .store-link b { display: block; font-size: 1.02rem; }
+  .store-link small { color: var(--muted); font-size: .82rem; }
+  .store-link::after { content: "↗"; margin-left: auto; color: var(--accent-2); }
+
 
   /* 進場動畫 */
   .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s, transform .7s cubic-bezier(.2,.8,.2,1); }
@@ -319,7 +338,7 @@
     .card.wide { flex-direction: column; }
     .card.wide .thumb { flex: none; aspect-ratio: 16 / 10; min-height: 0; }
     .card.wide .body { padding: 22px 24px 24px; }
-    .about { grid-template-columns: 1fr; }
+    .about, .stores { grid-template-columns: 1fr; }
     .hero { display: block; min-height: 0; background: var(--bg); }
     .hero::before { display: none; }
     .hero-img { display: block; position: relative; }
@@ -406,6 +425,22 @@
 
   <section id="works">
     <div class="wrap">
+      <div class="stores reveal" id="app-stores" hidden>
+        <div>
+          <h2>作品也能上架官方商店</h2>
+          <p>學員做好的作品不只能放在網頁上，也可以打包上架到 Apple App Store 和 Google Chrome 線上應用程式商店，讓全世界的人搜尋、下載。這兩個作品就是已經上架的例子，點開就能看到。</p>
+        </div>
+        <div class="store-links">
+          <a class="store-link" href="https://apps.apple.com/tw/app/%E4%B8%80%E6%8C%87%E9%80%A3%E9%8E%96/id6823008605">
+            <img src="images/stores/one-tap-chain-app.webp" alt="一指連鎖 App 圖示" width="56" height="56" loading="lazy">
+            <span><b>一指連鎖</b><small>Apple App Store · 免費遊戲</small></span>
+          </a>
+          <a class="store-link" href="https://chromewebstore.google.com/detail/my-stock-%E8%87%AA%E9%81%B8%E8%82%A1/idmjopmkbiadjgiccabclpfhpmhgefbd">
+            <img src="images/stores/my-stock-ext.webp" alt="My Stock 自選股 擴充功能圖示" width="56" height="56" loading="lazy">
+            <span><b>My Stock 自選股</b><small>Chrome 線上應用程式商店 · 擴充功能</small></span>
+          </a>
+        </div>
+      </div>
       <div class="grid" id="grid"></div>
       <div class="videos" id="video-list" hidden></div>
     </div>
@@ -871,6 +906,7 @@
     const isVideo = tab === "video";
     grid.hidden = isVideo;
     videosBox.hidden = !isVideo;
+    document.getElementById("app-stores").hidden = tab !== "app";
     isVideo ? initVideos() : stopVideos();
     const cards = [...grid.querySelectorAll(".card")];
     cards.forEach(c => c.classList.toggle("hide", c.dataset.cat !== tab));
