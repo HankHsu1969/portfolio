@@ -1,0 +1,3 @@
+# Netlify：作品集已整合進星方向官網，首頁永久轉址（GitHub Pages 會忽略這個檔案，改由 index.html 轉址）
+/            https://www.guidestar.com.tw/ai-apps/  301!
+/index.html  https://www.guidestar.com.tw/ai-apps/  301!
